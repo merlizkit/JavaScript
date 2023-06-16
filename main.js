@@ -180,4 +180,4 @@ function logIn(){
     }
 }
 
-logIn()
+setTimeout(logIn(),100);
