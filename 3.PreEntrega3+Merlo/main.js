@@ -17,56 +17,77 @@ class createProducts {
     }    
 }    
 
-let prodList;
+let fx; // funcion en la que se está operando
 if((document.querySelector('#login'))) {
-    const formLogIn = document.querySelector('#login');
-    formLogIn.addEventListener('click', logIn);
+    fx = document.querySelector('#login');
+    fx.addEventListener('click', logIn); // ¿si hace click en cualquier lado igual registra?
 };
 
 if((document.querySelector('#register'))) {
-    const formReg = document.querySelector('#register');
-    formReg.addEventListener('click', register);
+    fx = document.querySelector('#register');
+    fx.addEventListener('click', register);
 };
 
-    
-function createProduct () {
-    const prodCode = prompt('Ingrese el codigo del nuevo producto');
-    if (prodCode !== null){
-        const prodIdx = products.findIndex(prod => prod.code === prodCode);
-        if(prodIdx !=-1) { 
-            alert('Codigo de producto ya existente')
-            createProduct();
-        } else {
-            const prodDesc = prompt('Ingrese el nombre del nuevo producto');
-            const prodPrice = Number(prompt('Ingrese el precio del nuevo producto'));
-            const prodStock = Number(prompt('Ingrese el stock inicial'));
-            const maxId = products.reduce((prods,item)=> prods = prods > item.id ? prods: item.id,0 )
-            const newProduct = {
-                id: maxId + 1,
-                code: prodCode,
-                description: prodDesc,
-                price: prodPrice,
-                stock: prodStock
-            }    
-            products.push(new createProducts(newProduct))
-            alert(`Producto ${newProduct.code} creado`);
-            console.log("---------------Producto Creado---------------");
-            console.log(`Code: ${newProduct.code}\nDescription: ${newProduct.description}\nPrice: ${newProduct.price}\nStock: ${newProduct.stock}\nID: ${newProduct.id}`)
-            console.log("--------------------------------------------");
-            selectOperation();    
-        }    
-    } else {
-        exit("1");
-    }    
-}    
-
-
 if((document.querySelector('.prod-list'))) {
-    prodList = document.querySelector('.prod-list');
+    fx = document.querySelector('.prod-list');
     listProducts();
 };
 
-function listProducts () {
+if((document.querySelector('#issue'))) {
+    fx = document.querySelector('#issue');
+    fx.addEventListener('click', stockIssue);
+};
+
+if((document.querySelector('#receipt'))) {
+    fx = document.querySelector('#receipt');
+    fx.addEventListener('click', stockReceipt);
+};
+
+if((document.querySelector('#create'))) {
+    fx = document.querySelector('#create');
+    fx.addEventListener('click', createProduct);
+};
+
+function createProduct (e) {
+    e.preventDefault();
+    if(e.target.id == 'cre-btn'){
+        const prodCode = document.querySelector('#cre-code #cre-code').value
+        if (prodCode !== null){
+            const prodIdx = products.findIndex(prod => prod.code === prodCode);
+            if(prodIdx !=-1) { 
+                alert('Codigo de producto ya existente') // poner el aviso en el mensaje del campo del form
+            } else {
+                const prodDesc = document.querySelector('#cre-desc #cre-desc').value;
+                const prodPrice = document.querySelector('#cre-price #cre-price').value;
+                const prodStock = document.querySelector('#cre-stock #cre-stock').value;
+                const maxId = products.reduce((prods,item)=> prods = prods > item.id ? prods: item.id,0 )
+                const newProduct = {
+                    id: maxId + 1,
+                    code: prodCode,
+                    description: prodDesc,
+                    price: prodPrice,
+                    stock: prodStock
+                }    
+                products.push(new createProducts(newProduct))
+                const fila = document.createElement('ul');
+                fila.innerHTML = `
+                Producto ${newProduct.code} creado
+                <ul>Codigo: ${newProduct.code}
+                    <li>Descripcion: ${newProduct.description}</li>
+                    <li>Precio: ${newProduct.price}</li>
+                    <li>Stock: ${newProduct.stock}</li>
+                    <li>ID: ${newProduct.id}</li>
+                </ul> 
+                `
+                fx.appendChild(fila);
+            }    
+        } else {
+            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
+        }
+    }     
+}    
+
+function listProducts (e) {
     products.forEach(product => {
         const fila = document.createElement('ul');
         fila.innerHTML = `
@@ -78,153 +99,138 @@ function listProducts () {
         </ul>
         `
         prodList.appendChild(fila);
-    })    
-    //selectOperation();
-}    
-
-function productStatus() {
-    const prodCode = prompt('Ingrese el codigo de producto');
-    if (prodCode !== null){
-        const prodIdx = products.findIndex(prod => prod.code === prodCode);
-        if(prodIdx !=-1) { 
-            console.log("---------------Estado Producto--------------");
-            console.log(`Code: ${products[prodIdx].code}\nDescription: ${products[prodIdx].description}\nPrice: ${products[prodIdx].price}\nStock: ${products[prodIdx].stock}\nID: ${products[prodIdx].id}`)
-            console.log("--------------------------------------------");
-            selectOperation();
-        } else {
-            exit("5");
-        }    
-    } else {
-        alert('Codigo inexistente');
-        productStatus();
-    }    
-}    
-
-function stockReceipt () {
-    const prodCode = prompt('Ingrese el codigo de producto');
-    if (prodCode !== null){
-        const prodIdx = products.findIndex(prod => prod.code === prodCode);
-        if(prodIdx !=-1) { 
-            let qty = Number(prompt('Stock: '+products[prodIdx].stock+'.\nIndicar cantidad a ingresar (S para salir):'));
-            if (qty !== null){
-                while (qty<=0 && !isNaN(qty)) {
-                    alert('La cantidad debe ser mayor a cero');
-                    qty = Number(prompt('Stock: '+products[prodIdx].stock+'.\nIndicar cantidad a ingresar (S para salir):'));
-                }    
-                if(qty > 0) {
-                    products[prodIdx].stock = products[prodIdx].stock + qty;
-                    console.log("--------------Stock ingresado---------------");
-                    console.log('Producto: '+ products[prodIdx].code);
-                    console.log('Nuevo stock: '+ products[prodIdx].stock);
-                    console.log("--------------------------------------------");
-                    selectOperation();
-                } else{
-                    exit("2");
-                }    
+    });
+    if(e.target.id = 'find-btn'){
+        const prodCode = document.querySelector('#find-code #find-code').value
+        if (prodCode !== null){
+            const prodIdx = products.findIndex(prod => prod.code === prodCode);
+            if(prodIdx !=-1) { 
+                const fila = document.createElement('ul');
+                fila.innerHTML = `
+                <ul>Codigo: ${products[prodIdx].code}
+                    <li>Descripcion: ${products[prodIdx].description}</li>
+                    <li>Precio: ${products[prodIdx].price}</li>
+                    <li>Stock: ${products[prodIdx].stock}</li>
+                    <li>ID: ${products[prodIdx].id}</li>
+                </ul> 
+                `
+                fx.appendChild(fila);
             } else {
-                exit("2");
+                alert('Codigo inexistente'); // poner el aviso en el mensaje del campo del form
             }    
         } else {
-            alert('Codigo inexistente');
-            stockReceipt();
-        }    
-    } else {
-    exit("2");    
+            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
+        }
     }
 }    
 
-function stockIssue() {
-    const prodCode = prompt('Ingrese el codigo de producto');
-    if (prodCode !== null){
-        const prodIdx = products.findIndex(prod => prod.code === prodCode);
-        if(prodIdx !=-1) { 
-            let qty = Number(prompt('Stock: '+products[prodIdx].stock+'.\nIngrese cantidad a consumir (S para salir):'));
-            if (qty !== null){
-                while (qty<=0 && !isNaN(qty)) {
-                    alert('La cantidad debe ser mayor a cero');
-                    qty = Number(prompt('Stock: '+products[prodIdx].stock+'.\nIngrese cantidad a consumir (S para salir):'));
-                }    
-                if(qty > 0) {
-                    if (products[prodIdx].stock >= qty) {
-                        products[prodIdx].stock = products[prodIdx].stock - qty;
-                        console.log("---------------Stock consumido--------------");
-                        console.log('Producto: '+ products[prodIdx].code);
-                        console.log('Nuevo stock: '+ products[prodIdx].stock);
-                        console.log("--------------------------------------------");
-                        selectOperation();
-                    } else {
-                        alert('No hay stock suficiente');
-                        stockIssue();
-                    }    
-                } else {
-                    exit("3");
-                }    
+function productStatus() {
+    e.preventDefault();
+    if(e.target.id = 'find-btn'){
+        const prodCode = document.querySelector('#find-code #find-code').value
+        if (prodCode !== null){
+            const prodIdx = products.findIndex(prod => prod.code === prodCode);
+            if(prodIdx !=-1) { 
+                const fila = document.createElement('ul');
+                fila.innerHTML = `
+                <ul>Codigo: ${products[prodIdx].code}
+                    <li>Descripcion: ${products[prodIdx].description}</li>
+                    <li>Precio: ${products[prodIdx].price}</li>
+                    <li>Stock: ${products[prodIdx].stock}</li>
+                    <li>ID: ${products[prodIdx].id}</li>
+                </ul> 
+                `
+                fx.appendChild(fila);
             } else {
-                exit("3");
+                alert('Codigo inexistente'); // poner el aviso en el mensaje del campo del form
             }    
         } else {
-            alert('Codigo inexistente');
-            stockIssue();
-        }    
-    } else {
-        exit("3");
-    }    
+            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
+        }
+    }     
 }    
 
-function exit (op) {
-    const exit = confirm('¿Desea volver al menú principal?')
-    if(exit === true) {
-        selectOperation();
-    } else {
-        switch(op){
-            case "1":
-                createProduct();
-                break;
-            case "2":
-                stockReceipt(); 
-                break;
-            case "3":
-                stockIssue();
-                break;
-            case "4":
-                listProducts(products);
-                break;
-            case "5":
-                productStatus();
-                break;  
-            case "6":
-                selectOperation();
-                break;  
-            default:     
-                console.log("Debe seleccionar una opción")
-        }        
-    }    
+function stockReceipt (e) {
+    e.preventDefault();
+    if(e.target.id == 'rcp-btn'){
+        const prodCode = document.querySelector('#receipt #rcp-code').value
+        if (prodCode !== null){
+            const prodIdx = products.findIndex(prod => prod.code === prodCode);
+            if(prodIdx !=-1) { 
+                const fila = document.createElement('ul');
+                fila.innerHTML = `
+                <ul>Código: ${products[prodIdx].code} 
+                    <li>Descripción: ${products[prodIdx].description}</li>
+                    <li>Precio: ${products[prodIdx].price}</li>
+                    <li>Stock: ${products[prodIdx].stock}</li>
+                    <li>Id: ${products[prodIdx].id}</li>
+                </ul>
+                `
+                fx.appendChild(fila); // puede que falte indicar la clase del p del html
+                let qty = document.querySelector('#issue #rcp-qty').value;
+                if (qty !== null){
+                    while (qty<=0 && !isNaN(qty)) {
+                        alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
+                        qty = document.querySelector('#issue #rcp-qty').value;
+                    }    
+                    if(qty > 0) {
+                        products[prodIdx].stock = products[prodIdx].stock + qty;
+                    } else{
+                        alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
+                    }    
+                } else {
+                    alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
+                }    
+            } else {
+                alert('Codigo inexistente'); // poner el aviso en el mensaje del campo del form
+            }    
+        } else {
+            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
+        }
 }    
-function selectOperation () {
-    let op = prompt("¿Qué quiere hacer a continuación?\n\n   1: Crear producto\n   2: Ingresar stock\n   3: Consumir stock\n   4: Listar productos\n   5: Consulta producto\n\n   6: Salir");
 
-    switch(op){
-        case "1":
-            createProduct();
-            break;
-        case "2":
-            stockReceipt(); 
-            break;
-        case "3":
-            stockIssue();
-            break;
-        case "4":
-            listProducts(products);
-            break;  
-        case "5":
-            productStatus();
-            break;  
-        case "6":
-            alert('Hasta luego');
-            break;  
-        default:     
-            console.log("Debe seleccionar una opción")
-    }        
+function stockIssue(e) {
+    e.preventDefault();
+    if(e.target.id == 'iss-btn'){
+        const prodCode = document.querySelector('#issue #iss-code').value
+        if (prodCode !== null){ 
+            const prodIdx = products.findIndex(prod => prod.code === prodCode);
+            if(prodIdx !=-1) {
+                const fila = document.createElement('ul');
+                fila.innerHTML = `
+                <ul>Código: ${products[prodIdx].code} 
+                    <li>Descripción: ${products[prodIdx].description}</li>
+                    <li>Precio: ${products[prodIdx].price}</li>
+                    <li>Stock: ${products[prodIdx].stock}</li>
+                    <li>Id: ${products[prodIdx].id}</li>
+                </ul>
+                `
+                fx.appendChild(fila); // puede que falte indicar la clase del p del html
+                let qty = document.querySelector('#issue #iss-qty').value;
+                if (qty !== null){
+                    while (qty<=0 && !isNaN(qty)) {
+                        alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
+                        qty = document.querySelector('#issue #iss-qty').value;
+                    }    
+                    if(qty > 0) {
+                        if (products[prodIdx].stock >= qty) {
+                            products[prodIdx].stock = products[prodIdx].stock - qty;
+                        } else {
+                            alert('No hay stock suficiente'); // poner el aviso en el mensaje del campo del form
+                        }    
+                    } else {
+                        alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
+                    }    
+                } else {
+                    alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
+                }    
+            } else {
+                alert('Codigo inexistente'); // poner el aviso en el mensaje del campo del form
+            }    
+        } else {
+            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
+        }
+    } 
 }    
 
 function logIn(e){
@@ -273,23 +279,3 @@ function register(e){
         }
     }
 }
-
-function start() {
-    let op = prompt("¡Bienvenido!\nIngrese el numero de opción elegida:\n\n   1: Ingresar\n   2: Registrarse\n\n   3: Salir");
-
-    switch(op){
-        case "1":
-            logIn();
-            break;
-        case "2":
-            register(); 
-            break;
-        case "3":
-            alert('Hasta luego');
-            break;  
-        default: 
-            console.log("Debe seleccionar una opción")
-    }
-}
-
-//start();
