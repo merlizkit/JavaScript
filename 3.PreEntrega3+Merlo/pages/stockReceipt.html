@@ -12,5 +12,22 @@
 </head>
 <body>
     <h1>Ingreso de stock</h1>
+    
+    <div class="container">
+        <form id="receipt">
+            <div class="mb-3">
+            <label for="rcp-code" class="form-label">Código</label>
+            <input type="text" class="form-control" id="rcp-code">
+            </div>
+            <div class="mb-3">
+            <label for="rcp-qty" class="form-label">Cantidad</label>
+            <input type="text" class="form-control" id="rcp-qty">
+            </div>
+            <button type="submit" class="btn btn-primary" id="rcp-btn">Confirmar</button>
+        </form>
+    </div>
+    
+    <p class="receipt"></p>
+    
 </body>
 </html>
