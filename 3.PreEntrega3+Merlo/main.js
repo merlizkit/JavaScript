@@ -253,13 +253,13 @@ function logIn(e){
                     '¡Bienvenido!',
                     enteredUser,
                     'success'
-                    ).then(() => location.href = '/pages/menu.html')
+                    ).then(() => location.href = '/menu.html')
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Usuario o contraseña incorrectos',
-                    footer: '<a href="./register.html">Registrarse</a>'
+                    footer: '<a href="/register.html">Registrarse</a>'
                   })
             }
         } else {
@@ -267,7 +267,7 @@ function logIn(e){
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Usuario o contraseña incorrectos',
-                footer: '<a href="./register.html">Registrarse</a>'
+                footer: '<a href="/register.html">Registrarse</a>'
               })
         }
     }
@@ -288,7 +288,7 @@ function register(e){
                 '¡Bienvenido!',
                 enteredUser,
                 'success'
-                ).then(() => location.href = '/pages/menu.html')
+                ).then(() => location.href = '/menu.html')
             const newUser = {
                 id: maxId + 1,
                 user: enteredUser,
@@ -297,13 +297,12 @@ function register(e){
             }
             userObject.push(new createUser(newUser));
             localStorage.setItem('users', JSON.stringify(userObject));
-            location.href = '/pages/menu.html'
         } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Usuario ya existente',
-                footer: '<a href="./logIn.html">Login</a>'
+                footer: '<a href="/logIn.html">Login</a>'
               })
         }
     }
