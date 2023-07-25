@@ -38,17 +38,17 @@ if(funLis) {listProducts()};
 if (menuPg){
     document.addEventListener('keydown', (e) => {
         if (e.code === "Numpad1" || e.code === "Digit1") {
-            location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/newProduct.html';
+            location.href = './pages/newProduct.html';
         } else if (e.code === "Numpad2" || e.code === "Digit2") {
-            location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/stockReceipt.html';
+            location.href = './pages/stockReceipt.html';
         } else if (e.code === "Numpad3" || e.code === "Digit3") {
-            location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/stockIssue.html';
+            location.href = './pages/stockIssue.html';
         } else if (e.code === "Numpad4" || e.code === "Digit4") {
-            location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/productList.html';
+            location.href = './pages/productList.html';
         } else if (e.code === "Numpad5" || e.code === "Digit5") {
-            location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/findProduct.html';
+            location.href = './pages/findProduct.html';
         } else if (e.code === "Numpad6" || e.code === "Digit6") {
-            location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/menu.html';
+            location.href = './pages/menu.html';
         }
     });
 };
@@ -57,11 +57,11 @@ if (indexPg) {
         switch(e.code) {
             case "Numpad1":
             case "Digit1":
-                location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/login.html';
+                location.href = './pages/login.html';
                 break;
             case "Numpad2":
             case "Digit2":
-                location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/register.html';
+                location.href = './pages/register.html';
                 break;
             }
         });
@@ -253,13 +253,13 @@ function logIn(e){
                     '¡Bienvenido!',
                     enteredUser,
                     'success'
-                    ).then(() => location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/menu.html')
+                    ).then(() => location.href = './pages/menu.html')
             } else {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Usuario o contraseña incorrectos',
-                    footer: '<a href="https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/register.html">Registrarse</a>'
+                    footer: '<a href="./pages/register.html">Registrarse</a>'
                   })
             }
         } else {
@@ -267,7 +267,7 @@ function logIn(e){
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Usuario o contraseña incorrectos',
-                footer: '<a href="https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/register.html">Registrarse</a>'
+                footer: '<a href="./pages/register.html">Registrarse</a>'
               })
         }
     }
@@ -288,7 +288,7 @@ function register(e){
                 '¡Bienvenido!',
                 enteredUser,
                 'success'
-                ).then(() => location.href = 'https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/menu.html')
+                ).then(() => location.href = './pages/menu.html')
             const newUser = {
                 id: maxId + 1,
                 user: enteredUser,
@@ -302,7 +302,7 @@ function register(e){
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Usuario ya existente',
-                footer: '<a href=".https://merlizkit.github.io/JavaScript/3.PreEntrega3+Merlo/pages/logIn.html">Login</a>'
+                footer: '<a href="../pages/logIn.html">Login</a>'
               })
         }
     }
