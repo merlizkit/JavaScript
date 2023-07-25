@@ -15,137 +15,171 @@ class createProducts {
         this.price = product.price,
         this.stock = product.stock
     }    
-}    
-
+}
+if (!document.querySelector('.index') 
+    && !document.querySelector('#register') 
+    && !document.querySelector('#login') 
+    && !document.querySelector('.form-control')) {
+        document.addEventListener('keydown', (e) => {
+            switch(e.code) {
+                case "Numpad1":
+                    case "Digit1":
+                        location.href = '/pages/newProduct.html';
+                break;
+            case "Numpad2":
+                case "Digit2":
+                    location.href = '/pages/stockReceipt.html';
+                    break;
+            case "Numpad3":
+            case "Digit3":
+                location.href = '/pages/stockIssue.html';
+                break;
+                case "Numpad4":
+                    case "Digit4":
+                        location.href = '/pages/productList.html';
+                break;
+            case "Numpad5":
+            case "Digit5":
+                location.href = '/pages/findProduct.html';
+                break;
+                case "Numpad6":
+                    case "Digit6":
+                        location.href = '/pages/menu.html';
+                    }
+    });
+}
+if (document.querySelector('.index')) {
+    document.addEventListener('keydown', (e) => {
+        switch(e.code) {
+            case "Numpad1":
+            case "Digit1":
+                location.href = '/pages/login.html';
+                break;
+                case "Numpad2":
+                    case "Digit2":
+                        location.href = '/pages/register.html';
+                        break;
+                    }
+                });
+            }
+// let shortcuts=0;
+// if(document.querySelector('.shortcuts') && shortcuts === 0) {
+    //     document.addEventListener('click', (e) => {
+        //         e.preventDefault;
+        //         Swal.fire({
+//             icon: 'success',
+//             title: 'Atajos de teclado',
+//             html: '<p>1: Crear Producto</p><p>2: Ingresar Stock</p><p>3: Consumo de stock</p><p>4: Lista de productos</p><p>5: Buscar Producto</p><p>6: Menu</p>',
+//         }).then(()=> shortcuts = 1);
+//     });
+//     console.log(document.querySelector('.shortcuts'));
+// };
 let fx; // funcion en la que se está operando
-if((document.querySelector('#login'))) {
+if(document.querySelector('#login')) {
     fx = document.querySelector('#login');
-    fx.addEventListener('click', logIn); // ¿si hace click en cualquier lado igual registra?
+    fx.addEventListener('click', logIn);
 };
-
-if((document.querySelector('#register'))) {
+if(document.querySelector('#register')) {
     fx = document.querySelector('#register');
     fx.addEventListener('click', register);
 };
-
-if((document.querySelector('.prod-list'))) {
+if(document.querySelector('.prod-list')) {
     fx = document.querySelector('.prod-list');
     listProducts();
 };
-
-if((document.querySelector('#issue'))) {
+if(document.querySelector('#issue')) {
     fx = document.querySelector('#issue');
     fx.addEventListener('click', stockIssue);
 };
-
-if((document.querySelector('#receipt'))) {
+if(document.querySelector('#receipt')) {
     fx = document.querySelector('#receipt');
     fx.addEventListener('click', stockReceipt);
 };
-
-if((document.querySelector('#create'))) {
-    fx = document.querySelector('#create');
+if(document.querySelector('#create-product')) {
+    fx = document.querySelector('#create-product');
     fx.addEventListener('click', createProduct);
 };
+if(document.querySelector('.find-code')) {
+    fx = document.querySelector('.find-code');
+    btn = document.querySelector('#find-btn');
+    btn.addEventListener('click', productStatus);
+};
+
 
 function createProduct (e) {
     e.preventDefault();
     if(e.target.id == 'cre-btn'){
-        const prodCode = document.querySelector('#cre-code #cre-code').value
-        if (prodCode !== null){
-            const prodIdx = products.findIndex(prod => prod.code === prodCode);
-            if(prodIdx !=-1) { 
-                alert('Codigo de producto ya existente') // poner el aviso en el mensaje del campo del form
-            } else {
-                const prodDesc = document.querySelector('#cre-desc #cre-desc').value;
-                const prodPrice = document.querySelector('#cre-price #cre-price').value;
-                const prodStock = document.querySelector('#cre-stock #cre-stock').value;
-                const maxId = products.reduce((prods,item)=> prods = prods > item.id ? prods: item.id,0 )
-                const newProduct = {
-                    id: maxId + 1,
-                    code: prodCode,
-                    description: prodDesc,
-                    price: prodPrice,
-                    stock: prodStock
-                }    
-                products.push(new createProducts(newProduct))
-                const fila = document.createElement('ul');
-                fila.innerHTML = `
-                Producto ${newProduct.code} creado
-                <ul>Codigo: ${newProduct.code}
-                    <li>Descripcion: ${newProduct.description}</li>
-                    <li>Precio: ${newProduct.price}</li>
-                    <li>Stock: ${newProduct.stock}</li>
-                    <li>ID: ${newProduct.id}</li>
-                </ul> 
-                `
-                fx.appendChild(fila);
-            }    
+        const prodCode = document.querySelector('#cre-code').value
+        console.log(prodCode);
+        const prodIdx = products.findIndex(prod => prod.code === prodCode);
+        if(prodIdx !=-1) { 
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Codigo de producto ya existente',
+            })
         } else {
-            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
-        }
+            const prodDesc = document.querySelector('#cre-desc').value;
+            const prodPrice = document.querySelector('#cre-price').value;
+            const prodStock = document.querySelector('#cre-stock').value;
+            const maxId = products.reduce((prods,item)=> prods = prods > item.id ? prods: item.id,0 )
+            const newProduct = {
+                id: maxId + 1,
+                code: prodCode,
+                description: prodDesc,
+                price: prodPrice,
+                stock: prodStock
+            }
+            products.push(new createProducts(newProduct))
+            const item = document.createElement('ul');
+            item.innerHTML = `
+            <ul class="container fs-4">Producto <strong>${newProduct.code}</strong> creado:
+                <li class="fs-5"><strong>Descripcion: ${newProduct.description}</strong></li>
+                <li class="fs-5"><strong>Precio: ${newProduct.price}</strong></li>
+                <li class="fs-5"><strong>Stock: ${newProduct.stock}</strong></li>
+                <li class="fs-5"><strong>ID: ${newProduct.id}</strong></li>
+            </ul> 
+            `
+            document.querySelector('.cre-info').replaceChildren(item);
+        }    
     }     
 }    
 
-function listProducts (e) {
+function listProducts () {
     products.forEach(product => {
-        const fila = document.createElement('ul');
-        fila.innerHTML = `
-        <ul>Código: ${product.code} 
-            <li>Descripción: ${product.description}</li>
-            <li>Precio: ${product.price}</li>
-            <li>Stock: ${product.stock}</li>
-            <li>Id: ${product.id}</li>
+        const item = document.createElement('ul');
+        item.innerHTML = `
+        <ul class="container fs-4">Código: <strong>${product.code}</strong>
+            <li class="fs-5">Descripción: <strong>${product.description}</strong></li>
+            <li class="fs-5">Precio: <strong>${product.price}</strong></li>
+            <li class="fs-5">Stock: <strong>${product.stock}</strong></li>
+            <li class="fs-5">Id: <strong>${product.id}</strong></li>
         </ul>
         `
-        prodList.appendChild(fila);
+        fx.appendChild(item);
     });
-    if(e.target.id = 'find-btn'){
-        const prodCode = document.querySelector('#find-code #find-code').value
-        if (prodCode !== null){
-            const prodIdx = products.findIndex(prod => prod.code === prodCode);
-            if(prodIdx !=-1) { 
-                const fila = document.createElement('ul');
-                fila.innerHTML = `
-                <ul>Codigo: ${products[prodIdx].code}
-                    <li>Descripcion: ${products[prodIdx].description}</li>
-                    <li>Precio: ${products[prodIdx].price}</li>
-                    <li>Stock: ${products[prodIdx].stock}</li>
-                    <li>ID: ${products[prodIdx].id}</li>
-                </ul> 
-                `
-                fx.appendChild(fila);
-            } else {
-                alert('Codigo inexistente'); // poner el aviso en el mensaje del campo del form
-            }    
-        } else {
-            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
-        }
-    }
 }    
 
-function productStatus() {
+function productStatus(e) {
     e.preventDefault();
     if(e.target.id = 'find-btn'){
-        const prodCode = document.querySelector('#find-code #find-code').value
-        if (prodCode !== null){
-            const prodIdx = products.findIndex(prod => prod.code === prodCode);
-            if(prodIdx !=-1) { 
-                const fila = document.createElement('ul');
-                fila.innerHTML = `
-                <ul>Codigo: ${products[prodIdx].code}
-                    <li>Descripcion: ${products[prodIdx].description}</li>
-                    <li>Precio: ${products[prodIdx].price}</li>
-                    <li>Stock: ${products[prodIdx].stock}</li>
-                    <li>ID: ${products[prodIdx].id}</li>
-                </ul> 
-                `
-                fx.appendChild(fila);
-            } else {
-                alert('Codigo inexistente'); // poner el aviso en el mensaje del campo del form
-            }    
+        const prodCode = document.querySelector('#find-code').value
+        const prodIdx = products.findIndex(prod => prod.code === prodCode);
+        if(prodIdx !=-1) { 
+            const item = document.createElement('ul');
+            item.innerHTML = `
+            <ul class="container fs-4">Codigo: <strong>${products[prodIdx].code}</strong>
+                <li class="fs-5">Descripcion: <strong>${products[prodIdx].description}</strong></li>
+                <li class="fs-5">Precio: <strong>${products[prodIdx].price}</strong></li>
+                <li class="fs-5">Stock: <strong>${products[prodIdx].stock}</strong></li>
+                <li class="fs-5">ID: <strong>${products[prodIdx].id}</strong></li>
+            </ul> 
+            `
+            document.querySelector('.prod-info').replaceChildren(item);
         } else {
-            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
+            const item = document.createElement('p');
+            item.innerHTML = '<p class="msg container">Codigo inexistente</p>';
+            document.querySelector('.prod-info').replaceChildren(item);
         }
     }     
 }    
@@ -157,79 +191,78 @@ function stockReceipt (e) {
         if (prodCode !== null){
             const prodIdx = products.findIndex(prod => prod.code === prodCode);
             if(prodIdx !=-1) { 
-                const fila = document.createElement('ul');
-                fila.innerHTML = `
-                <ul>Código: ${products[prodIdx].code} 
-                    <li>Descripción: ${products[prodIdx].description}</li>
-                    <li>Precio: ${products[prodIdx].price}</li>
-                    <li>Stock: ${products[prodIdx].stock}</li>
-                    <li>Id: ${products[prodIdx].id}</li>
-                </ul>
-                `
-                fx.appendChild(fila); // puede que falte indicar la clase del p del html
-                let qty = document.querySelector('#issue #rcp-qty').value;
-                if (qty !== null){
-                    while (qty<=0 && !isNaN(qty)) {
-                        alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
-                        qty = document.querySelector('#issue #rcp-qty').value;
-                    }    
-                    if(qty > 0) {
-                        products[prodIdx].stock = products[prodIdx].stock + qty;
-                    } else{
-                        alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
-                    }    
+                let qty = Number(document.querySelector('#receipt #rcp-qty').value);
+                if(qty > 0) {
+                    products[prodIdx].stock = products[prodIdx].stock + qty;
+                    const item = document.createElement('ul');
+                    item.innerHTML = `
+                    <ul class="container fs-4">Código: <strong>${products[prodIdx].code}</strong>
+                        <li class="fs-5">Descripción: <strong>${products[prodIdx].description}</strong></li>
+                        <li class="fs-5">Precio: <strong>${products[prodIdx].price}</strong></li>
+                        <li class="fs-5">Stock: <strong>${products[prodIdx].stock}</strong></li>
+                        <li class="fs-5">Id: <strong>${products[prodIdx].id}</strong></li>
+                    </ul>
+                    `
+                    document.querySelector('.receipt').replaceChildren(item); // puede que falte indicar la clase del p del html
                 } else {
-                    alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
-                }    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'La cantidad debe ser mayor que 0',
+                      })
+                }
             } else {
-                alert('Codigo inexistente'); // poner el aviso en el mensaje del campo del form
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Codigo inexistente',
+                })
             }    
-        } else {
-            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
         }
-}    
+    }
+}
 
 function stockIssue(e) {
     e.preventDefault();
     if(e.target.id == 'iss-btn'){
         const prodCode = document.querySelector('#issue #iss-code').value
-        if (prodCode !== null){ 
-            const prodIdx = products.findIndex(prod => prod.code === prodCode);
-            if(prodIdx !=-1) {
-                const fila = document.createElement('ul');
-                fila.innerHTML = `
-                <ul>Código: ${products[prodIdx].code} 
-                    <li>Descripción: ${products[prodIdx].description}</li>
-                    <li>Precio: ${products[prodIdx].price}</li>
-                    <li>Stock: ${products[prodIdx].stock}</li>
-                    <li>Id: ${products[prodIdx].id}</li>
-                </ul>
-                `
-                fx.appendChild(fila); // puede que falte indicar la clase del p del html
-                let qty = document.querySelector('#issue #iss-qty').value;
-                if (qty !== null){
-                    while (qty<=0 && !isNaN(qty)) {
-                        alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
-                        qty = document.querySelector('#issue #iss-qty').value;
-                    }    
-                    if(qty > 0) {
-                        if (products[prodIdx].stock >= qty) {
-                            products[prodIdx].stock = products[prodIdx].stock - qty;
-                        } else {
-                            alert('No hay stock suficiente'); // poner el aviso en el mensaje del campo del form
-                        }    
-                    } else {
-                        alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
-                    }    
+        const prodIdx = products.findIndex(prod => prod.code === prodCode);
+        if(prodIdx !=-1) {
+            let qty = Number(document.querySelector('#issue #iss-qty').value);  
+            if(qty > 0) {
+                if (products[prodIdx].stock >= qty) {
+                    products[prodIdx].stock = products[prodIdx].stock - qty;
+                    const item = document.createElement('ul');
+                    item.innerHTML = `
+                    <ul class="container fs-4">Código: <strong>${products[prodIdx].code}</strong>
+                        <li class="fs-5">Descripción: <strong>${products[prodIdx].description}</strong></li>
+                        <li class="fs-5">Precio: <strong>${products[prodIdx].price}</strong></li>
+                        <li class="fs-5">Stock: <strong>${products[prodIdx].stock}</strong></li>
+                        <li class="fs-5">Id: <strong>${products[prodIdx].id}</strong></li>
+                    </ul>
+                    `
+                    document.querySelector('.issue').replaceChildren(item);
                 } else {
-                    alert('La cantidad debe ser mayor a cero'); // poner el aviso en el mensaje del campo del form
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        html: `<p>No hay stock suficiente</p><p>Stock disponible: ${products[prodIdx].stock}</p>`,
+                    })
                 }    
             } else {
-                alert('Codigo inexistente'); // poner el aviso en el mensaje del campo del form
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'La cantidad debe ser mayor a cero',
+                })
             }    
         } else {
-            alert('Ingrese un producto'); // poner el aviso en el mensaje del campo del form
-        }
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Codigo inexistente',
+            })
+        }    
     } 
 }    
 
@@ -241,16 +274,26 @@ function logIn(e){
         if(userIdx != -1){
             const enteredPass = document.querySelector('#login #log-pass').value;
             if(enteredPass === users[userIdx].pass){
-                alert('Bienvenido '+ enteredUser);
-                location.href = '/pages/menu.html'
-            
+                Swal.fire(
+                    '¡Bienvenido!',
+                    enteredUser,
+                    'success'
+                    ).then(() => location.href = '/pages/menu.html')
             } else {
-                alert('Contraseña incorrecta');
-                logIn();
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Usuario o contraseña incorrectos',
+                    footer: '<a href="./register.html">Registrarse</a>'
+                  })
             }
         } else {
-            alert('Usuario incorrecto');
-            logIn();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Usuario o contraseña incorrectos',
+                footer: '<a href="./register.html">Registrarse</a>'
+              })
         }
     }
 }
@@ -264,7 +307,11 @@ function register(e){
             const enteredPass = document.querySelector('#register #reg-pass').value;
             const enteredMail = document.querySelector('#register #reg-email').value;
             const maxId = users.reduce((users,usr)=> users = users > usr.id ? users: usr.id,0 )
-            alert('Bienvenido '+ enteredUser);
+            Swal.fire(
+                '¡Bienvenido!',
+                enteredUser,
+                'success'
+              )
             const newUser = {
                 id: maxId + 1,
                 user: enteredUser,
@@ -274,8 +321,12 @@ function register(e){
             users.push(new createUser(newUser));
             location.href = '/pages/menu.html'
         } else {
-            alert('Usuario ya esistente');
-            logIn();
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Usuario ya existente',
+                footer: '<a href="./logIn.html">Login</a>'
+              })
         }
     }
 }
