@@ -1,3 +1,5 @@
+// el localStorage se reinicia cuando se carga la pagina del index.
+
 const users = [
     {
         id: 1,
@@ -22,3 +24,6 @@ const products = [
         stock: 75
     }
 ]
+
+localStorage.setItem('users', JSON.stringify(users));
+localStorage.setItem('products', JSON.stringify(products));

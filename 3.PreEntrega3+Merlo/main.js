@@ -16,102 +16,64 @@ class createProducts {
         this.stock = product.stock
     }    
 }
-if (!document.querySelector('.index') 
-    && !document.querySelector('#register') 
-    && !document.querySelector('#login') 
-    && !document.querySelector('.form-control')) {
-        document.addEventListener('keydown', (e) => {
-            switch(e.code) {
-                case "Numpad1":
-                    case "Digit1":
-                        location.href = '/pages/newProduct.html';
-                break;
-            case "Numpad2":
-                case "Digit2":
-                    location.href = '/pages/stockReceipt.html';
-                    break;
-            case "Numpad3":
-            case "Digit3":
-                location.href = '/pages/stockIssue.html';
-                break;
-                case "Numpad4":
-                    case "Digit4":
-                        location.href = '/pages/productList.html';
-                break;
-            case "Numpad5":
-            case "Digit5":
-                location.href = '/pages/findProduct.html';
-                break;
-                case "Numpad6":
-                    case "Digit6":
-                        location.href = '/pages/menu.html';
-                    }
+
+const btnLog = document.querySelector('#log-btn');
+const btnReg = document.querySelector('#reg-btn');
+const btnCre = document.querySelector('#cre-btn');
+const btnRcp = document.querySelector('#receipt');
+const btnIss = document.querySelector('#iss-btn');
+const btnFnd = document.querySelector('#fnd-btn');
+const funLis = document.querySelector('.prod-list')
+const menuPg = document.querySelector('.menu')
+const indexPg = document.querySelector('.index')
+
+if(btnLog) {btnLog.addEventListener('click', logIn)};
+if(btnReg) {btnReg.addEventListener('click', register)};
+if(btnCre) {btnCre.addEventListener('click', createProduct)};
+if(btnRcp) {btnRcp.addEventListener('click', stockReceipt)};
+if(btnIss) {btnIss.addEventListener('click', stockIssue)};
+if(btnFnd) {btnFnd.addEventListener('click', productStatus)};
+if(funLis) {listProducts()};
+
+if (menuPg){
+    document.addEventListener('keydown', (e) => {
+        if (e.code === "Numpad1" || e.code === "Digit1") {
+            location.href = '/pages/newProduct.html';
+        } else if (e.code === "Numpad2" || e.code === "Digit2") {
+            location.href = '/pages/stockReceipt.html';
+        } else if (e.code === "Numpad3" || e.code === "Digit3") {
+            location.href = '/pages/stockIssue.html';
+        } else if (e.code === "Numpad4" || e.code === "Digit4") {
+            location.href = '/pages/productList.html';
+        } else if (e.code === "Numpad5" || e.code === "Digit5") {
+            location.href = '/pages/findProduct.html';
+        } else if (e.code === "Numpad6" || e.code === "Digit6") {
+            location.href = '/pages/menu.html';
+        }
     });
-}
-if (document.querySelector('.index')) {
+};
+if (indexPg) {
     document.addEventListener('keydown', (e) => {
         switch(e.code) {
             case "Numpad1":
             case "Digit1":
                 location.href = '/pages/login.html';
                 break;
-                case "Numpad2":
-                    case "Digit2":
-                        location.href = '/pages/register.html';
-                        break;
-                    }
-                });
+            case "Numpad2":
+            case "Digit2":
+                location.href = '/pages/register.html';
+                break;
             }
-// let shortcuts=0;
-// if(document.querySelector('.shortcuts') && shortcuts === 0) {
-    //     document.addEventListener('click', (e) => {
-        //         e.preventDefault;
-        //         Swal.fire({
-//             icon: 'success',
-//             title: 'Atajos de teclado',
-//             html: '<p>1: Crear Producto</p><p>2: Ingresar Stock</p><p>3: Consumo de stock</p><p>4: Lista de productos</p><p>5: Buscar Producto</p><p>6: Menu</p>',
-//         }).then(()=> shortcuts = 1);
-//     });
-//     console.log(document.querySelector('.shortcuts'));
-// };
-let fx; // funcion en la que se está operando
-if(document.querySelector('#login')) {
-    fx = document.querySelector('#login');
-    fx.addEventListener('click', logIn);
-};
-if(document.querySelector('#register')) {
-    fx = document.querySelector('#register');
-    fx.addEventListener('click', register);
-};
-if(document.querySelector('.prod-list')) {
-    fx = document.querySelector('.prod-list');
-    listProducts();
-};
-if(document.querySelector('#issue')) {
-    fx = document.querySelector('#issue');
-    fx.addEventListener('click', stockIssue);
-};
-if(document.querySelector('#receipt')) {
-    fx = document.querySelector('#receipt');
-    fx.addEventListener('click', stockReceipt);
-};
-if(document.querySelector('#create-product')) {
-    fx = document.querySelector('#create-product');
-    fx.addEventListener('click', createProduct);
-};
-if(document.querySelector('.find-code')) {
-    fx = document.querySelector('.find-code');
-    btn = document.querySelector('#find-btn');
-    btn.addEventListener('click', productStatus);
-};
+        });
+    }
 
-
+/* ------------------------- Crear nuevos productos ------------------------- */
 function createProduct (e) {
     e.preventDefault();
     if(e.target.id == 'cre-btn'){
-        const prodCode = document.querySelector('#cre-code').value
-        console.log(prodCode);
-        const prodIdx = products.findIndex(prod => prod.code === prodCode);
+        const prodCode = document.querySelector('#cre-code').value;
+        const prodObject = JSON.parse(localStorage.getItem('products'));
+        const prodIdx = prodObject.findIndex(prod => prod.code === prodCode);
         if(prodIdx !=-1) { 
             Swal.fire({
                 icon: 'error',
@@ -122,7 +84,7 @@ function createProduct (e) {
             const prodDesc = document.querySelector('#cre-desc').value;
             const prodPrice = document.querySelector('#cre-price').value;
             const prodStock = document.querySelector('#cre-stock').value;
-            const maxId = products.reduce((prods,item)=> prods = prods > item.id ? prods: item.id,0 )
+            const maxId = prodObject.reduce((prods,item)=> prods = prods > item.id ? prods: item.id,0 )
             const newProduct = {
                 id: maxId + 1,
                 code: prodCode,
@@ -130,7 +92,8 @@ function createProduct (e) {
                 price: prodPrice,
                 stock: prodStock
             }
-            products.push(new createProducts(newProduct))
+            prodObject.push(new createProducts(newProduct));
+            localStorage.setItem('products', JSON.stringify(prodObject));
             const item = document.createElement('ul');
             item.innerHTML = `
             <ul class="container fs-4">Producto <strong>${newProduct.code}</strong> creado:
@@ -145,8 +108,10 @@ function createProduct (e) {
     }     
 }    
 
+/* ---------------------- listar los productos creados ---------------------- */
 function listProducts () {
-    products.forEach(product => {
+    const prodObject = JSON.parse(localStorage.getItem('products'));
+    prodObject.forEach(product => {
         const item = document.createElement('ul');
         item.innerHTML = `
         <ul class="container fs-4">Código: <strong>${product.code}</strong>
@@ -156,23 +121,25 @@ function listProducts () {
             <li class="fs-5">Id: <strong>${product.id}</strong></li>
         </ul>
         `
-        fx.appendChild(item);
+        funLis.appendChild(item);
     });
 }    
 
+/* -------------------------- consultar un producto ------------------------- */
 function productStatus(e) {
     e.preventDefault();
-    if(e.target.id = 'find-btn'){
+    if(e.target.id = 'fnd-btn'){
         const prodCode = document.querySelector('#find-code').value
-        const prodIdx = products.findIndex(prod => prod.code === prodCode);
+        const prodObject = JSON.parse(localStorage.getItem('products'));
+        const prodIdx = prodObject.findIndex(prod => prod.code === prodCode);
         if(prodIdx !=-1) { 
             const item = document.createElement('ul');
             item.innerHTML = `
-            <ul class="container fs-4">Codigo: <strong>${products[prodIdx].code}</strong>
-                <li class="fs-5">Descripcion: <strong>${products[prodIdx].description}</strong></li>
-                <li class="fs-5">Precio: <strong>${products[prodIdx].price}</strong></li>
-                <li class="fs-5">Stock: <strong>${products[prodIdx].stock}</strong></li>
-                <li class="fs-5">ID: <strong>${products[prodIdx].id}</strong></li>
+            <ul class="container fs-4">Codigo: <strong>${prodObject[prodIdx].code}</strong>
+                <li class="fs-5">Descripcion: <strong>${prodObject[prodIdx].description}</strong></li>
+                <li class="fs-5">Precio: <strong>${prodObject[prodIdx].price}</strong></li>
+                <li class="fs-5">Stock: <strong>${prodObject[prodIdx].stock}</strong></li>
+                <li class="fs-5">ID: <strong>${prodObject[prodIdx].id}</strong></li>
             </ul> 
             `
             document.querySelector('.prod-info').replaceChildren(item);
@@ -184,23 +151,26 @@ function productStatus(e) {
     }     
 }    
 
+/* ---------------------------- Ingreso de stock ---------------------------- */
 function stockReceipt (e) {
     e.preventDefault();
     if(e.target.id == 'rcp-btn'){
         const prodCode = document.querySelector('#receipt #rcp-code').value
+        const prodObject = JSON.parse(localStorage.getItem('products'));
         if (prodCode !== null){
-            const prodIdx = products.findIndex(prod => prod.code === prodCode);
+            const prodIdx = prodObject.findIndex(prod => prod.code === prodCode);
             if(prodIdx !=-1) { 
                 let qty = Number(document.querySelector('#receipt #rcp-qty').value);
                 if(qty > 0) {
-                    products[prodIdx].stock = products[prodIdx].stock + qty;
+                    prodObject[prodIdx].stock = Number(prodObject[prodIdx].stock) + qty;
+                    localStorage.setItem('products', JSON.stringify(prodObject));
                     const item = document.createElement('ul');
                     item.innerHTML = `
-                    <ul class="container fs-4">Código: <strong>${products[prodIdx].code}</strong>
-                        <li class="fs-5">Descripción: <strong>${products[prodIdx].description}</strong></li>
-                        <li class="fs-5">Precio: <strong>${products[prodIdx].price}</strong></li>
-                        <li class="fs-5">Stock: <strong>${products[prodIdx].stock}</strong></li>
-                        <li class="fs-5">Id: <strong>${products[prodIdx].id}</strong></li>
+                    <ul class="container fs-4">Código: <strong>${prodObject[prodIdx].code}</strong>
+                        <li class="fs-5">Descripción: <strong>${prodObject[prodIdx].description}</strong></li>
+                        <li class="fs-5">Precio: <strong>${prodObject[prodIdx].price}</strong></li>
+                        <li class="fs-5">Stock: <strong>${prodObject[prodIdx].stock}</strong></li>
+                        <li class="fs-5">Id: <strong>${prodObject[prodIdx].id}</strong></li>
                     </ul>
                     `
                     document.querySelector('.receipt').replaceChildren(item); // puede que falte indicar la clase del p del html
@@ -222,23 +192,26 @@ function stockReceipt (e) {
     }
 }
 
+/* ---------------------------- consumo del stock --------------------------- */
 function stockIssue(e) {
     e.preventDefault();
     if(e.target.id == 'iss-btn'){
         const prodCode = document.querySelector('#issue #iss-code').value
-        const prodIdx = products.findIndex(prod => prod.code === prodCode);
+        const prodObject = JSON.parse(localStorage.getItem('products'));
+        const prodIdx = prodObject.findIndex(prod => prod.code === prodCode);
         if(prodIdx !=-1) {
             let qty = Number(document.querySelector('#issue #iss-qty').value);  
             if(qty > 0) {
-                if (products[prodIdx].stock >= qty) {
-                    products[prodIdx].stock = products[prodIdx].stock - qty;
+                if (prodObject[prodIdx].stock >= qty) {
+                    prodObject[prodIdx].stock = prodObject[prodIdx].stock - qty;
+                    localStorage.setItem('products', JSON.stringify(prodObject));
                     const item = document.createElement('ul');
                     item.innerHTML = `
-                    <ul class="container fs-4">Código: <strong>${products[prodIdx].code}</strong>
-                        <li class="fs-5">Descripción: <strong>${products[prodIdx].description}</strong></li>
-                        <li class="fs-5">Precio: <strong>${products[prodIdx].price}</strong></li>
-                        <li class="fs-5">Stock: <strong>${products[prodIdx].stock}</strong></li>
-                        <li class="fs-5">Id: <strong>${products[prodIdx].id}</strong></li>
+                    <ul class="container fs-4">Código: <strong>${prodObject[prodIdx].code}</strong>
+                        <li class="fs-5">Descripción: <strong>${prodObject[prodIdx].description}</strong></li>
+                        <li class="fs-5">Precio: <strong>${prodObject[prodIdx].price}</strong></li>
+                        <li class="fs-5">Stock: <strong>${prodObject[prodIdx].stock}</strong></li>
+                        <li class="fs-5">Id: <strong>${prodObject[prodIdx].id}</strong></li>
                     </ul>
                     `
                     document.querySelector('.issue').replaceChildren(item);
@@ -246,7 +219,7 @@ function stockIssue(e) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        html: `<p>No hay stock suficiente</p><p>Stock disponible: ${products[prodIdx].stock}</p>`,
+                        html: `<p>No hay stock suficiente</p><p>Stock disponible: ${prodObject[prodIdx].stock}</p>`,
                     })
                 }    
             } else {
@@ -266,14 +239,16 @@ function stockIssue(e) {
     } 
 }    
 
+/* --------------------------- ingreso de usuario --------------------------- */
 function logIn(e){
     e.preventDefault();
     if(e.target.id == 'log-btn'){
         const enteredUser = document.querySelector('#login #log-user').value;
-        const userIdx = users.findIndex(user => user.user == enteredUser)
+        const userObject = JSON.parse(localStorage.getItem('users'));
+        const userIdx = userObject.findIndex(user => user.user == enteredUser)
         if(userIdx != -1){
             const enteredPass = document.querySelector('#login #log-pass').value;
-            if(enteredPass === users[userIdx].pass){
+            if(enteredPass === userObject[userIdx].pass){
                 Swal.fire(
                     '¡Bienvenido!',
                     enteredUser,
@@ -298,27 +273,30 @@ function logIn(e){
     }
 }
 
+/* --------------------------- registro de usuario -------------------------- */
 function register(e){
     e.preventDefault();
     if(e.target.id == 'reg-btn'){
         const enteredUser = document.querySelector('#register #reg-user').value;
-        const userIdx = users.findIndex(user => user.user == enteredUser)
+        const userObject = JSON.parse(localStorage.getItem('users'));
+        const userIdx = userObject.findIndex(user => user.user == enteredUser)
         if(userIdx === -1){
             const enteredPass = document.querySelector('#register #reg-pass').value;
             const enteredMail = document.querySelector('#register #reg-email').value;
-            const maxId = users.reduce((users,usr)=> users = users > usr.id ? users: usr.id,0 )
+            const maxId = userObject.reduce((users,usr)=> users = users > usr.id ? users: usr.id,0 )
             Swal.fire(
                 '¡Bienvenido!',
                 enteredUser,
                 'success'
-              )
+                ).then(() => location.href = '/pages/menu.html')
             const newUser = {
                 id: maxId + 1,
                 user: enteredUser,
                 mail: enteredMail,
                 pass: enteredPass
             }
-            users.push(new createUser(newUser));
+            userObject.push(new createUser(newUser));
+            localStorage.setItem('users', JSON.stringify(userObject));
             location.href = '/pages/menu.html'
         } else {
             Swal.fire({
