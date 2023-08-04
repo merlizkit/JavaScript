@@ -70,7 +70,7 @@ if (indexPg) {
 
 /* ---------------------- buscar usuarios del archivo ---------------------- */
 async function getUsers() {
-    const resp = await fetch('./data/users.json');
+    const resp = await fetch('../data/users.json');
     const userFile = await resp.json() || [];
     const userLocal = await JSON.parse(localStorage.getItem('users')) || [];
     return users = userLocal.length > 0 ? userLocal : userFile;
@@ -78,7 +78,7 @@ async function getUsers() {
 
 /* ---------------------- buscar productos del archivo ---------------------- */
 async function getProducts() {
-    const resp = await fetch('./data/products.json');
+    const resp = await fetch('../data/products.json');
     const prodFile = await resp.json() || [];
     const prodLocal = await JSON.parse(localStorage.getItem('products')) || [];
     return products = prodLocal.length > 0 ? prodLocal : prodFile;
