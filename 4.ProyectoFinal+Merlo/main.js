@@ -58,7 +58,7 @@ if (indexPg) {
         switch(e.code) {
             case "Numpad1":
             case "Digit1":
-                location.href = './pages/login.html';
+                location.href = './pages/logIn.html';
                 break;
             case "Numpad2":
             case "Digit2":
