@@ -49,7 +49,7 @@ if (menuPg){
         } else if (e.code === "Numpad5" || e.code === "Digit5") {
             location.href = './findProduct.html';
         } else if (e.code === "Numpad6" || e.code === "Digit6") {
-            location.href = './menu.html';
+            location.href = '../index.html';
         }
     });
 };
