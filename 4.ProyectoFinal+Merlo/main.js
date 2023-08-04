@@ -58,11 +58,11 @@ if (indexPg) {
         switch(e.code) {
             case "Numpad1":
             case "Digit1":
-                location.href = './login.html';
+                location.href = './pages/login.html';
                 break;
             case "Numpad2":
             case "Digit2":
-                location.href = './register.html';
+                location.href = './pages/register.html';
                 break;
             }
         });
