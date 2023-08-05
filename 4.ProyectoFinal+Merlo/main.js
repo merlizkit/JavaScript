@@ -88,16 +88,6 @@ async function getProducts() {
 async function listProducts () {
     const products = await getProducts();
     products.forEach(product => {
-        // const item = document.createElement('ul');
-        // item.classList = 'container fs-4'
-        // item.innerHTML = `
-        // Código: <strong>${product.code}</strong>
-        //     <li class="fs-5">Descripción: <strong>${product.description}</strong></li>
-        //     <li class="fs-5">Precio: <strong>${product.price}</strong></li>
-        //     <li class="fs-5">Stock: <strong>${product.stock}</strong></li>
-        //     <li class="fs-5">Id: <strong>${product.id}</strong></li>
-        // </ul>
-        // `
         const item = document.createElement('div');
         item.classList = 'col'
         item.innerHTML = `
